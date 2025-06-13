@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aplikasi To-Do List Responsif</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <div class="header-container" role="banner">
+      <a href="#" class="logo" aria-label="Logo Rise">
+        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f0540f4f-4713-4b44-9924-d0e8c8960999.png" alt="Blue circle logo with white text R" />
+        <span>Rise To-Do</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="#todo-input">Buat To-Do</a>
+        <a href="#pending-list">To-Do Tersisa</a>
+        <a href="#done-list">To-Do Selesai</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-navigation" aria-haspopup="true">
+        <span class="material-icons">menu</span>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation" aria-hidden="true">
+      <a href="#todo-input" tabindex="-1">Buat To-Do</a>
+      <a href="#pending-list" tabindex="-1">To-Do Tersisa</a>
+      <a href="#done-list" tabindex="-1">To-Do Selesai</a>
+    </nav>
+    <div class="overlay" tabindex="-1"></div>
+  </header>
+  <main>
+    <form class="todo-form" id="todo-form" aria-label="Formulir pembuatan To-Do" autocomplete="off">
+      <label for="todo-textarea">Tulis To-Do baru:</label>
+      <textarea id="todo-textarea" name="todo-textarea" placeholder="Ketik To-Do-mu di sini..." required aria-required="true" rows="3" spellcheck="true" aria-describedby="todo-desc"></textarea>
+      <div id="todo-desc" class="sr-only">Harap ketik deskripsi tugas yang ingin diselesaikan.</div>
+
+      <div class="form-controls">
+        <label for="priority-select">Prioritas:</label>
+        <select id="priority-select" name="priority-select" aria-label="Pilih prioritas task">
+          <option value="low" selected>Rendah</option>
+          <option value="medium">Sedang</option>
+          <option value="high">Tinggi</option>
+        </select>
+        <label for="deadline-date">Deadline:</label>
+        <input type="date" id="deadline-date" name="deadline-date" required aria-required="true" />
+
+        <button type="submit" class="submit-btn" aria-label="Tambahkan To-Do">Tambah To-Do</button>
+      </div>
+    </form>
+
+    <section class="lists-container" aria-live="polite" aria-relevant="additions removals" aria-atomic="false">
+        <article class="list-section" id="overdue-list" style="display: none;" aria-label="Daftar To-Do Terlewat Deadline">
+          <div class="section-header">
+            <h2 style="color: #f87171;">Tugas Terlewat (Overdue)</h2>
+            <button class="clear-btn" data-target="todo-overdue">Clear</button>
+          </div>
+          <ul class="todo-list" id="todo-overdue" tabindex="0">
+          <!-- Overdue ToDo items go here -->
+          </ul>
+        </article>
+        <article class="list-section" id="pending-list" aria-label="Daftar To-Do yang harus dikerjakan">
+          <div class="section-header">
+              <h2>To-Do List</h2>
+              <button class="clear-btn" data-target="todo-pending">Clear</button>
+          </div>
+          <ul class="todo-list" id="todo-pending" tabindex="0" aria-describedby="pending-desc">
+              <!-- Pending ToDo items go here -->
+          </ul>
+          <div id="pending-desc" class="sr-only">Daftar To-Do yang belum selesai, dapat di centang untuk selesai.</div>
+        </article>
+        <article class="list-section" id="done-list" aria-label="Daftar To-Do yang telah selesai">
+            <div class="section-header">
+              <h2>To-Do Selesai</h2>
+              <button class="clear-btn" data-target="todo-done">Clear</button>
+            </div>
+            <ul class="todo-list" id="todo-done" tabindex="0" aria-describedby="done-desc">
+            <!-- Done ToDo items go here -->
+            </ul>
+        </article>
+    </section>
+
+    <div class="delete-all-container">
+      <button class="delete-all-btn" id="delete-all-btn" aria-label="Hapus seluruh To-Do yang sudah dibuat">
+        Hapus Semua To-Do
+      </button>
+    </div>
+  </main>
+  <footer>
+    &copy; 2024 Rise To-Do Application | By Putri Yuni Aqsyah
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
+
