@@ -17,27 +17,6 @@
   deadlineDate.value = today;
   deadlineDate.min = today;
 
-  // Menu responsif
-  const menuToggle = document.querySelector('button.menu-toggle');
-  const mobileNav = document.querySelector('nav.mobile-nav');
-  const overlay = document.querySelector('.overlay');
-
-  function toggleMobileMenu() {
-    const open = mobileNav.classList.toggle('open');
-    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
-    if (open) {
-      overlay.classList.add('show');
-      const firstLink = mobileNav.querySelector('a');
-      if (firstLink) firstLink.focus();
-    } else {
-      overlay.classList.remove('show');
-      menuToggle.focus();
-    }
-  }
-  menuToggle.addEventListener('click', toggleMobileMenu);
-  overlay.addEventListener('click', toggleMobileMenu);
-
   // Simpan todo di memori
   let todos = [];
 
@@ -78,26 +57,12 @@
       year: (date.getFullYear() !== now.getFullYear()) ? 'numeric' : undefined
     });
   }
-  function formatTime(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString('id-ID', {
-      year: 'numeric', month:'numeric', day: 'numeric',
-      hour: '2-digit', minute: '2-digit'
-    });
-  }
 
   function isOverdue(todo) {
-  if (todo.done || !todo.deadline) return false;
+    if (todo.done || !todo.deadline) return false;
     const now = new Date().setHours(0,0,0,0);
     const deadlineDate = new Date(todo.deadline).setHours(0,0,0,0);
     return deadlineDate < now;
-  }
-
-  function isToday(todo) {
-    if (!todo.deadline) return false;
-    const now = new Date().setHours(0,0,0,0);
-    const deadlineDate = new Date(todo.deadline).setHours(0,0,0,0);
-    return now === deadlineDate;
   }
 
   // Fungsi helper untuk membuat elemen todo
@@ -163,7 +128,6 @@
     li.appendChild(deleteBtn);
 
     return li;
-
   }
 
   function deleteTodo(id) {
@@ -186,10 +150,10 @@
         saveTodos();
         renderTodos();
     }
-}
+  }
 
-// Event listener untuk tombol clear
-document.querySelectorAll('.clear-btn').forEach(btn => {
+  // Event listener untuk tombol clear
+  document.querySelectorAll('.clear-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const target = e.target.dataset.target;
         if(target === 'todo-overdue') {
@@ -200,15 +164,7 @@ document.querySelectorAll('.clear-btn').forEach(btn => {
             clearAllInSection('done');
         }
     });
-});
-document.querySelector('.clear-btn[data-target="todo-pending"]').addEventListener('click', () => {
-    if(confirm('Apakah Anda yakin ingin menghapus semua To-Do yang belum selesai?')) {
-        // Hanya simpan todo yang sudah selesai atau overdue
-        todos = todos.filter(todo => todo.done || isOverdue(todo));
-        saveTodos();
-        renderTodos();
-    }
-});
+  });
 
   function renderTodos() {
     todoPendingList.innerHTML = '';
@@ -285,16 +241,22 @@ document.querySelector('.clear-btn[data-target="todo-pending"]').addEventListene
     if(index < 0) return;
 
     todos[index].done = !todos[index].done;
+    todos[index].time = Date.now(); // Update waktu ketika di-toggle
     saveTodos();
     renderTodos();
   }
 
+  // Form submission handler
   todoForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    
     const text = todoTextarea.value.trim();
-    if(text.length === 0) return;
+    if(text.length === 0) {
+      alert('Teks To-Do tidak boleh kosong!');
+      return;
+    }
 
-    const priority = prioritySelect.value || 'low';
+    const priority = prioritySelect.value;
     const deadline = deadlineDate.value;
 
     const newTodo = {
@@ -310,19 +272,18 @@ document.querySelector('.clear-btn[data-target="todo-pending"]').addEventListene
     saveTodos();
     renderTodos();
 
-    // Reset input
-    todoTextarea.value = '';
-    prioritySelect.value = 'low';
-    deadlineDate.value = today;
+    // Reset form
+    todoForm.reset();
+    deadlineDate.value = today; // Tetapkan kembali ke hari ini
     todoTextarea.focus();
   });
 
   deleteAllBtn.addEventListener('click', () => {
-  if(confirm('Apakah Anda yakin ingin menghapus seluruh To-Do?')) {
-    todos = [];
-    saveTodos();
-    renderTodos();
-  }
+    if(confirm('Apakah Anda yakin ingin menghapus seluruh To-Do?')) {
+      todos = [];
+      saveTodos();
+      renderTodos();
+    }
   });
 
   function init() {
